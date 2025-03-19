@@ -6,6 +6,9 @@
 
 {% block body %}
 
-    <h1>HOMEPAGE</h1>
+    <h1>{{Titulo}}</h1>
+    <p>{{Texto}}</p>
+
+    <img src="{{ url_for('static', filename=img) }}" alt="ImagemHome">
 
 {% endblock %}
