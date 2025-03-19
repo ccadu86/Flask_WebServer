@@ -6,6 +6,9 @@
 
 {% block body %}
 
-    <h1>ADICIONAR PRODUTOS</h1>
+    {% for id, produto in produtos.items() %}
+        <p>{{id}} - {{produto}}</p>
+    {% endfor%}
+
 
 {% endblock %}

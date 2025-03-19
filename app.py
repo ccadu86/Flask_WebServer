@@ -13,17 +13,25 @@ def homepage():
 
 @app.route('/add_produto')
 def add_produto():
+    produtos = {}
     context = {}
-    return render_template("add_produto.html", context=context)
+    context["logo"] = "img/logo_senai.png"
+    produtos[1] = "Arroz"
+    produtos[2] = "Café"
+    produtos[3] = "Azeite"
+    context["produtos"] = produtos
+    return render_template("add_produto.html", **context)
 
 @app.route('/del_produto')
 def del_produto():
     context = {}
+    context["logo"] = "img/logo_senai.png"
     return render_template("del_produto.html", context=context)
 
 @app.route('/up_produto')
 def up_produto():
     context = {}
+    context["logo"] = "img/logo_senai.png"
     return render_template("up_produto.html", context=context)
 
 if __name__ == "__main__":
