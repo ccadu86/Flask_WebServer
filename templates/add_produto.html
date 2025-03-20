@@ -5,10 +5,35 @@
 {% endblock %}
 
 {% block body %}
-
-    {% for id, produto in produtos.items() %}
-        <p>{{id}} - {{produto}}</p>
-    {% endfor%}
-
-
+    <div class="add-produtos-container">
+        <div class="header-section">
+            <h1>Adicionar Produtos</h1>
+            <button class="add-button">+ Novo Produto</button>
+        </div>
+        
+        <div class="products-grid">
+            {% if produtos %}
+                {% for id, produto in produtos.items() %}
+                    <div class="product-card">
+                        <div class="product-image">
+                            {% if produto.imagem %}
+                                <img src="{{ url_for('static', filename=produto.imagem) }}" alt="{{ produto.nome }}">
+                            {% else %}
+                                <div class="no-image">Sem imagem</div>
+                            {% endif %}
+                        </div>
+                        <div class="product-info">
+                            <h3>{{ produto.nome }}</h3>
+                            <p class="product-price">R$ {{ produto.preco }}</p>
+                            <p class="product-description">{{ produto.descricao }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-products">
+                    <p>Nenhum produto cadastrado. Clique em "Novo Produto" para adicionar.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

@@ -5,10 +5,13 @@
 {% endblock %}    
 
 {% block body %}
-
-    <h1>{{Titulo}}</h1>
-    <p>{{Texto}}</p>
-
-    <img src="{{ url_for('static', filename=img) }}" alt="ImagemHome">
-
+    <div class="homepage-container">
+        <div class="image-section">
+            <img src="{{ url_for('static', filename=img) }}" alt="ImagemHome">
+        </div>
+        <div class="content-section">
+            <h1>{{Titulo}}</h1>
+            <p>{{Texto}}</p>
+        </div>
+    </div>
 {% endblock %}

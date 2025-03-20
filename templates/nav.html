@@ -1,9 +1,11 @@
 <nav>
-    <img src="{{url_for('static', filename=logo)}}" alt="Logo">
+    <a href="/">
+        <img src="{{url_for('static', filename=logo)}}" alt="Logo">
+    </a>
     <ul>
-        <li>homepage</li>
-        <li>adicionar</li>
-        <li>deletar</li>
-        <li>atualizar</li>
+        <li><a href="/">homepage</a></li>
+        <li><a href="/add_produto">adicionar</a></li>
+        <li><a href="/del_produto">deletar</a></li>
+        <li><a href="/up_produto">atualizar</a></li>
     </ul>
 </nav>
