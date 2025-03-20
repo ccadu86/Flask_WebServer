@@ -2,8 +2,129 @@
 
 {% block link %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/styleDelProduto.css') }}">
-{% endblock %}   
+{% endblock %}
 
 {% block body %}
-
+    <div class="delete-produtos-container">
+        <div class="header-section">
+            <h1>Excluir Produtos</h1>
+            <button type="button" id="deleteSelectedBtn" class="delete-button" disabled>Excluir Selecionados</button>
+        </div>
+        
+        <form id="deleteForm" action="{{ url_for('excluir_produtos') }}" method="POST">
+            <div class="products-grid">
+                {% if produtos %}
+                    {% for id, produto in produtos.items() %}
+                        <div class="product-card">
+                            <div class="selection-checkbox">
+                                <input type="checkbox" name="produtos_ids" value="{{ id }}" id="product-{{ id }}" class="product-checkbox">
+                                <label for="product-{{ id }}"></label>
+                            </div>
+                            <div class="product-image">
+                                {% if produto.imagem %}
+                                    <img src="{{ url_for('static', filename=produto.imagem) }}" alt="{{ produto.nome }}">
+                                {% else %}
+                                    <div class="no-image">Sem imagem</div>
+                                {% endif %}
+                            </div>
+                            <div class="product-info">
+                                <h3>{{ produto.nome }}</h3>
+                                <p class="product-price">R$ {{ produto.preco }}</p>
+                                <p class="product-description">{{ produto.descricao }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-products">
+                        <p>Nenhum produto cadastrado para excluir.</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Modal de confirmação -->
+            <div id="confirmModal" class="modal">
+                <div class="modal-content">
+                    <h2>Confirmar Exclusão</h2>
+                    <p>Tem certeza que deseja excluir os produtos selecionados?</p>
+                    <div class="modal-buttons">
+                        <button type="button" id="cancelDelete">Cancelar</button>
+                        <button type="submit" id="confirmDelete">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    
+    <script>
+        // Script simplificado para manipular a seleção e exibir o modal
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.product-checkbox');
+            const deleteBtn = document.getElementById('deleteSelectedBtn');
+            const modal = document.getElementById('confirmModal');
+            const cancelBtn = document.getElementById('cancelDelete');
+            const form = document.getElementById('deleteForm');
+            
+            // Atualizar estado do botão de exclusão
+            function updateDeleteButton() {
+                const hasSelected = Array.from(checkboxes).some(cb => cb.checked);
+                deleteBtn.disabled = !hasSelected;
+            }
+            
+            // Adicionar listeners para os checkboxes
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateDeleteButton);
+                checkbox.addEventListener('change', function() {
+                    // Destacar visualmente os cards selecionados
+                    const card = this.closest('.product-card');
+                    if (this.checked) {
+                        card.classList.add('selected');
+                    } else {
+                        card.classList.remove('selected');
+                    }
+                });
+            });
+            
+            // Abrir modal de confirmação ao clicar no botão de exclusão
+            deleteBtn.addEventListener('click', function() {
+                if (!deleteBtn.disabled) {
+                    modal.style.display = 'flex';
+                }
+            });
+            
+            // Fechar modal ao cancelar
+            cancelBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Fechar modal ao clicar fora
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Esconder mensagens flash após alguns segundos
+            setTimeout(function() {
+                const flashMessages = document.querySelector('.flash-messages');
+                if (flashMessages) {
+                    flashMessages.style.opacity = '0';
+                    setTimeout(function() {
+                        flashMessages.remove();
+                    }, 500);
+                }
+            }, 5000);
+        });
+    </script>
 {% endblock %}
