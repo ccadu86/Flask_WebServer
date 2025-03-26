@@ -5,35 +5,30 @@
 {% endblock %}
 
 {% block body %}
-    <div class="add-produtos-container">
-        <div class="header-section">
-            <h1>Adicionar Produtos</h1>
-            <button class="add-button">+ Novo Produto</button>
-        </div>
-        
-        <div class="products-grid">
-            {% if produtos %}
-                {% for id, produto in produtos.items() %}
-                    <div class="product-card">
-                        <div class="product-image">
-                            {% if produto.imagem %}
-                                <img src="{{ url_for('static', filename=produto.imagem) }}" alt="{{ produto.nome }}">
-                            {% else %}
-                                <div class="no-image">Sem imagem</div>
-                            {% endif %}
-                        </div>
-                        <div class="product-info">
-                            <h3>{{ produto.nome }}</h3>
-                            <p class="product-price">R$ {{ produto.preco }}</p>
-                            <p class="product-description">{{ produto.descricao }}</p>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <div class="no-products">
-                    <p>Nenhum produto cadastrado. Clique em "Novo Produto" para adicionar.</p>
-                </div>
-            {% endif %}
-        </div>
+    <div class="add-produto-container">
+        <h1>Adicionar Novo Produto</h1>
+        <form action="{{ url_for('add_produto') }}" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="nome">Nome do Produto</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="preco">Preço</label>
+                <input type="number" id="preco" name="preco" step="0.01" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="descricao">Descrição</label>
+                <textarea id="descricao" name="descricao" rows="4" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="imagem">Imagem do Produto</label>
+                <input type="file" id="imagem" name="imagem" accept="image/*">
+            </div>
+            
+            <button type="submit" class="submit-button">Adicionar Produto</button>
+        </form>
     </div>
 {% endblock %}

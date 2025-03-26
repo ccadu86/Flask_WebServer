@@ -1,0 +1,68 @@
+{% extends "index.html" %}
+{% block link %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styleProduto.css') }}">
+{% endblock %}
+{% block body %}
+    <div class="add-produtos-container">
+        <div class="header-section">
+            <h1>Adicionar Produtos</h1>
+            <button class="add-button" onclick="window.location.href='{{ url_for('add_produto_form') }}'">+ Novo Produto</button>
+        </div>
+       
+        <div class="products-grid">
+            {% if produtos %}
+                {% for id, produto in produtos.items() %}
+                    <div class="product-card" onclick="openEditModal('{{ id }}', '{{ produto.nome }}', '{{ produto.preco }}', '{{ produto.descricao }}', '{{ produto.imagem or '' }}')">
+                        <div class="product-image">
+                            {% if produto.imagem %}
+                                <img src="{{ url_for('static', filename=produto.imagem) }}" alt="{{ produto.nome }}">
+                            {% else %}
+                                <div class="no-image">Sem imagem</div>
+                            {% endif %}
+                        </div>
+                        <div class="product-info">
+                            <h3>{{ produto.nome }}</h3>
+                            <p class="product-price">R$ {{ produto.preco }}</p>
+                            <p class="product-description">{{ produto.descricao }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-products">
+                    <p>Nenhum produto cadastrado. Clique em "Novo Produto" para adicionar.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Modal de Edição -->
+        <div id="editProdutoModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeEditModal()">&times;</span>
+                <h2>Editar Produto</h2>
+                <form id="editProdutoForm" action="{{ url_for('up_produto') }}" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" id="editProdutoId" name="id">
+                    
+                    <label for="editNome">Nome do Produto:</label>
+                    <input type="text" id="editNome" name="nome" required>
+                    
+                    <label for="editPreco">Preço:</label>
+                    <input type="number" id="editPreco" name="preco" step="0.01" required>
+                    
+                    <label for="editDescricao">Descrição:</label>
+                    <textarea id="editDescricao" name="descricao" required></textarea>
+                    
+                    <label for="editImagem">Imagem:</label>
+                    <input type="file" id="editImagem" name="imagem" accept="image/*">
+                    
+                    <div class="modal-actions">
+                        <button type="submit" class="btn-salvar">Salvar Alterações</button>
+                        <button type="button" class="btn-cancelar" onclick="closeEditModal()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/scriptUpProduto.js') }}"></script>
+
+{% endblock %}
